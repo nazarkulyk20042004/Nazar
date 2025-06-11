@@ -1,0 +1,45 @@
+model:
+  architecture: "unet_attention"
+  input_size: [512, 512]
+  num_classes: 1
+  encoder_channels: [64, 128, 256, 512]
+  decoder_channels: [256, 128, 64, 32]
+  attention_channels: 256
+  activation: "leaky_relu"
+  dropout_rate: 0.3
+
+training:
+  batch_size: 8
+  epochs: 25
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  warmup_epochs: 5
+  loss_weights:
+    dice: 0.4
+    focal: 0.3
+    boundary: 0.2
+    box: 0.1
+
+data:
+  dataset_path: "data/raw/pvdn"
+  image_format: "jpg"
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+  augmentation: true
+
+preprocessing:
+  clahe_clip_limit: 2.0
+  gamma_correction: 2.2
+  noise_reduction: true
+  adaptive_threshold: true
+
+detection:
+  confidence_threshold: 0.5
+  nms_threshold: 0.4
+  max_detections: 100
+  cascade_scales: [64, 128, 256]
+  cascade_step: 4
+
+device: "cuda"
+random_seed: 42
